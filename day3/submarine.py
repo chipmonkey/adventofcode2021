@@ -27,7 +27,13 @@ class submarine:
             self._down(distance)
         elif direction == 'up':
             self._up(distance)
-#        print(f"{movestr}: hpos: {self.hpos} depth: {self.depth} aim: {self.aim}")
+
+    @staticmethod
+    def _binstr_to_int(binstr):
+        if isinstance(binstr, list):
+            binstr= ''.join([str(i) for i in binstr])
+        bint = int(binstr, 2)
+        return bint
 
     @staticmethod
     def _gamma_rate(report):
@@ -46,6 +52,36 @@ class submarine:
 
     def set_report(self, input):
         self.report = pd.DataFrame(input)
-        print(f"report is: {self.report}")
 
-    
+    def oxygen_rating(self):
+        oreport = self.report
+        remaining = len(oreport)
+        position = 0
+        while remaining > 1:
+            thing = oreport[position].mode()
+            if len(thing) > 1:
+                ostr = '1'
+            else:
+                ostr = ''.join([str(i) for i in list(oreport[position].mode().loc[0])])
+            oreport = [list(x[1]) for x in oreport.iterrows() if x[1][position] == ostr]
+            oreport = pd.DataFrame(oreport)
+            remaining = len(oreport)
+            position += 1
+        return self._binstr_to_int(list(oreport.loc[0]))
+
+    def carbon_rating(self):
+        creport = self.report
+        remaining = len(creport)
+        position = 0
+        while remaining > 1:
+            thing = creport[position].mode()
+            if len(thing) > 1:
+                cstr = '1'
+            else:
+                cstr = ''.join([str(i) for i in list(creport[position].mode().loc[0])])
+            cstr = '0' if cstr == '1' else '1'
+            creport = [list(x[1]) for x in creport.iterrows() if x[1][position] == cstr]
+            creport = pd.DataFrame(creport)
+            remaining = len(creport)
+            position += 1
+        return self._binstr_to_int(list(creport.loc[0]))

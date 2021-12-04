@@ -19,4 +19,8 @@ print(f"part 1: gamma: {gamma} epsilon: {epsilon} solution: {gamma * epsilon}")
 
 
 # Part 2
-
+oxygen = sub.oxygen_rating()
+carbon = sub.carbon_rating()
+print(f"oxygen: {oxygen}")
+print(f"carbon: {carbon}")
+print(f"part 2: sultion: {oxygen * carbon}")
